@@ -1,0 +1,10 @@
+# Ignore the virtual environment directory
+venv/
+
+# Flask cache files
+*.pyc
+__pycache__/
+instance/
+
+# If you are using Flask-Cache
+cache/
