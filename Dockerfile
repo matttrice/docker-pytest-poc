@@ -1,13 +1,16 @@
 # Use an official Python runtime as a parent image
-FROM python:3.7-slim
+FROM python:3.8.0-alpine
+
+COPY ./requirements.txt /app/requirements.txt
 
 WORKDIR /app
 
-ADD . /app
+RUN pip install -r requirements.txt
 
-RUN pip install --no-cache-dir -r requirements.txt
+COPY . /app
 
-EXPOSE 80
-
-#  flask --app app/index run --host 0.0.0.0 --debug
+# translate local command to docker command:
+# flask --app app/index run --host 0.0.0.0 --debug
 CMD ["flask", "--app", "app/index", "run", "--host", "0.0.0.0", "--debug"]
+
+# docker run -p 5000:5000 -d flask_docker
