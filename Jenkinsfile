@@ -33,7 +33,6 @@ pipeline {
             args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
-    }
     triggers {
         pollSCM('H/5 * * * *') // Poll the repository every 5 minutes
     }
