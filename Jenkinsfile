@@ -28,47 +28,11 @@ def executeCurlCommand(String method, String url, String data, String jqFilter) 
 }
 pipeline {
     agent {
-        kubernetes {
-            yaml '''
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    jenkins/jenkins-jenkins-agent: "true"
-spec:
-  containers:
-  - name: docker
-    image: docker:24.0.2
-    command:
-    - sleep
-    args:
-    - 99d
-    volumeMounts:
-    - name: docker-socket
-      mountPath: /var/run
-    - name: docker-config
-      mountPath: /home/jenkins/.docker
-    - name: private-git-vol
-      mountPath: /home/jenkins/.ssh
-      readOnly: true
-  - name: docker-daemon
-    image: docker:24.0.2-dind
-    securityContext:
-      privileged: true
-    volumeMounts:
-    - name: docker-socket
-      mountPath: /var/run
-  volumes:
-  - name: docker-socket
-    emptyDir: {}
-  - name: docker-config
-    configMap:
-      name: docker-config
-  - name: private-git-vol
-    secret:
-      secretName: private-git
-'''
+        docker {
+            image 'docker:24.0.2'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
+    }
     }
     triggers {
         pollSCM('H/5 * * * *') // Poll the repository every 5 minutes
